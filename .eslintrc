@@ -1,12 +1,18 @@
 {
+  "parser": "babel-eslint",
   "extends": "airbnb",
   "globals": {
-    "React": true
+    "React": true,
+    "$": true,
+    "strftime": true
   },
   "rules": {
     "max-len": [ "error", 120 ],
     "comma-dangle": [ "error", "never" ],
     "eol-last": [ "off" ],
-    "react/prefer-stateless-function": [ "off" ]
+    "react/prefer-stateless-function": [ "off" ],
+    "arrow-body-style": [ "off" ],
+    "react/jsx-boolean-value": [ "off" ],
+    "global-require" : [ "off" ]
   }
 }

@@ -1,39 +1,32 @@
-/**
- * Created by limengsi3299 on 2017/1/13.
- */
-/* eslint-disable */
-var gulp = require("gulp");
-var gutil = require("gulp-util");
+var gulp = require('gulp');
+var webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
+var gutil = require('gulp-util');
+var config = require('./webpack/webpack.config');
 var eslint = require('gulp-eslint');
-var webpack = require("webpack");
-var webpackDevMiddleware = require('webpack-dev-middleware');
-var webpackHotMiddleware = require('webpack-hot-middleware');
-var config = require('./webpack/webpack.config.js');
 
-gulp.task('lint', function() {//检查是不是符合格式规范 gulp lint
-    return gulp.src(
-        [
-            '**/*.js',
-            '!node_modules/**/*'
-        ])
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+gulp.task('server', function () {
+  var watchPort = 3000;
+  new WebpackDevServer(webpack(config), {
+    noInfo: true,
+    publicPath: config.output.publicPath,
+    hot: true,
+    historyApiFallback: true
+  }).listen(3000, 'localhost', function (err, result) {
+    if (err) {
+      return gutil.PluginError(err);
+    }
+
+    gutil.log("==> Listening on port %s. Open up http://localhost:%s/ in your browser.", watchPort, watchPort);
+  });
 });
 
-gulp.task('server', function() {
-    var app = new (require('express'))();
-    var port = 3000;
-
-    var compiler = webpack(config);
-    app.use(webpackDevMiddleware(compiler, {noInfo: true, publicPath: config.output.publicPath}));
-    app.use(webpackHotMiddleware(compiler));
-
-    app.listen(port, function (error) {
-        if (error) {
-            gutil.PluginError(error);
-        } else {
-            gutil.log("==> Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port);
-        }
-    });
+gulp.task('lint', function() {
+  return gulp.src(
+    [
+      './src/**/*.js'
+    ])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });
