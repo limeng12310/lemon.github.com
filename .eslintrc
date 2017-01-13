@@ -1,0 +1,12 @@
+{
+  "extends": "airbnb",
+  "globals": {
+    "React": true
+  },
+  "rules": {
+    "max-len": [ "error", 120 ],
+    "comma-dangle": [ "error", "never" ],
+    "eol-last": [ "off" ],
+    "react/prefer-stateless-function": [ "off" ]
+  }
+}
