@@ -1,0 +1,20 @@
+
+.image-gallery-slide img {
+    width: 100%;
+}
+
+.image-gallery-index {
+    display: none;
+}
+
+.image-gallery-content .image-gallery-left-nav, .image-gallery-content .image-gallery-right-nav {
+    /*轮播左右两边箭头*/
+    display: none;
+    /*箭头下的盒子（横条）*/
+    /*border: none;*/
+    /*background: none;*/
+}
+
+.image-gallery-thumbnails {
+    display: none;
+}

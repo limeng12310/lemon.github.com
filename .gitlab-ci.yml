@@ -1,0 +1,47 @@
+stages:
+  - default
+
+before_script:
+  # test for ci
+  # unique hash of required dependencies
+  - PACKAGE_HASH=($(md5sum package.json))
+  # path to cache file
+  - DEPS_CACHE=~/cache/dependencies_${PACKAGE_HASH}.tar.gz
+  # Check if cache file exists and if not, create it
+  - if [ -f $DEPS_CACHE ];
+    then
+      tar zxf $DEPS_CACHE;
+    else
+      yarn install;
+      tar zcf - ./node_modules > $DEPS_CACHE;
+    fi
+
+eslint:
+  stage:
+    default
+  script:
+  - node_modules/.bin/gulp lint
+  cache:
+    key: "yarn.lock"
+    paths:
+    - yarn.lock
+  except:
+  - master
+  - tags
+  tags:
+  - shell
+
+test_deploy:
+  stage:
+    default
+  script:
+  - node_modules/.bin/webpack --config webpack/webpack.test.config.js
+  # - rsync -avzP ./build/ root@test.thorgene.com:/srv/docker/thorgene-mweb-nginx/html/slyx --exclude=node_modules --delete
+  cache:
+    key: "yarn.lock"
+    paths:
+    - yarn.lock
+  only:
+  - /^test.*$/
+  tags:
+  - shell
